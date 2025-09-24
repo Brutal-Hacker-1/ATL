@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ATAL Lab</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #1E90FF; /* Blue background */
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      color: white;
+      text-align: center;
+    }
+
+    #intro, #main {
+      text-align: center;
+    }
+
+    /* Robot design */
+    .robot {
+      width: 120px;
+      height: 180px;
+      background: #333;
+      border-radius: 15px;
+      position: relative;
+      margin: auto;
+      animation: moveIn 3s forwards;
+    }
+
+    .robot-head {
+      width: 100px;
+      height: 100px;
+      background: #444;
+      border-radius: 15px;
+      position: absolute;
+      top: -120px;
+      left: 10px;
+    }
+
+    .eye {
+      width: 20px;
+      height: 20px;
+      background: #00ffcc;
+      border-radius: 50%;
+      position: absolute;
+      top: 30px;
+    }
+
+    .eye.left {
+      left: 20px;
+    }
+
+    .eye.right {
+      right: 20px;
+    }
+
+    .antenna {
+      width: 10px;
+      height: 40px;
+      background: #ff4444;
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @keyframes moveIn {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(0); }
+    }
+
+    #main {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="intro">
+    <div class="robot">
+      <div class="robot-head">
+        <div class="antenna"></div>
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+      </div>
+    </div>
+    <h1 id="message">Hi, Welcome to ATAL Lab!</h1>
+    <p>Say "continue" to enter...</p>
+  </div>
+
+  <div id="main">
+    <h1>Welcome Inside ATAL Lab 🚀</h1>
+    <p>This is the main website content.</p>
+  </div>
+
+  <script>
+    // Robot speaks
+    function speak(text) {
+      let msg = new SpeechSynthesisUtterance(text);
+      msg.pitch = 1;
+      msg.rate = 1;
+      window.speechSynthesis.speak(msg);
+    }
+
+    // Speak welcome message
+    setTimeout(() => {
+      speak("Hi, Welcome to ATAL Lab. Say continue to enter the website.");
+    }, 2000);
+
+    // Voice recognition
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+
+    recognition.onresult = function(event) {
+      let transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      console.log("Heard:", transcript);
+      if (transcript.includes("continue")) {
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("main").style.display = "block";
+        speak("Welcome inside ATAL Lab!");
+        recognition.stop();
+      }
+    };
+
+    recognition.start();
+  </script>
+</body>
+</html>
